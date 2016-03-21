@@ -6,7 +6,7 @@ Vagrant configuration for a Runalyze development environment
 RunalyzeVagrant is a vagrant configuration that sets up a development environment for [Runalyze](http://www.runalyze.com/) based on an Ubuntu Cloud Image including
 - an Apache webserver
 - a MySQL database
-- the latest development sources of [Runalyze](http://www.runalyze.com/)
+- the latest development sources of Runalyze
 
 
 ## Installation
@@ -26,7 +26,7 @@ vagrant up
 This spins up a virtual machine containing a local installation o Runalyze.
 Doing this the first time may take a while, since the os image (Ubuntu Wily) has to be downloaded, required packages have to be installed and the [Runalyze repository](https://github.com/Runalyze/Runalyze) has to be cloned.
 
-Once the installation is finished, you can find your local version of Runalyze at http://localhost:8080/runalyze
+Once the installation is finished, you can find your local version of Runalyze at (http://localhost:8080/runalyze)
 
 Use 
 ```bash
