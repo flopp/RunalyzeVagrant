@@ -4,6 +4,7 @@ WWW_USER=vagrant
 WWW_GROUP=vagrant
 WWW_DIR=/var/www/html
 RUNALYZE_DIR="${WWW_DIR}/runalyze"
+RUNALYZE_PLAYGROUND_DIR="${WWW_DIR}/runalyze-playground"
 DB_NAME=runalyze
 DB_USER=runalyze
 DB_PASSWORD=runalyze123
@@ -28,12 +29,12 @@ service apache2 restart
 
 echo "INSTALLING RUNALYZE"
 if [ -d "${RUNALYZE_DIR}/.git" ] ; then
-    (cd "${RUNALYZE_DIR}" ; sudo -u "${WWW_USER}" git pull)
+    (cd "${RUNALYZE_DIR}" ; sudo -su "${WWW_USER}" git pull)
 else
-    sudo -u "${WWW_USER}" git clone https://github.com/Runalyze/Runalyze.git "${RUNALYZE_DIR}"
+    sudo -su "${WWW_USER}" git clone https://github.com/Runalyze/Runalyze.git "${RUNALYZE_DIR}"
 fi
-sudo -u "${WWW_USER}" composer --working-dir="${RUNALYZE_DIR}" install --prefer-dist
-sudo -u "${WWW_USER}" php "${RUNALYZE_DIR}/build/build.php" translations
+sudo -su "${WWW_USER}" composer --working-dir="${RUNALYZE_DIR}" install --prefer-dist
+sudo -su "${WWW_USER}" php "${RUNALYZE_DIR}/build/build.php" translations
 sed -e "s/{config::host}/localhost/g" \
     -e "s/{config::port}/3306/g" \
     -e "s/{config::database}/${DB_NAME}/g" \
@@ -43,6 +44,15 @@ sed -e "s/{config::host}/localhost/g" \
     -e "s/{config::debug}/false/g" \
     -e "s/{config::garminkey}//g" \
     "${RUNALYZE_DIR}/inc/install/config.php" > "${RUNALYZE_DIR}/data/config.php"
+
+
+echo "INSTALLING RUNALYZE PLAYGROUND"
+if [ -d "${RUNALYZE_PLAYGROUND_DIR}/.git" ] ; then
+    (cd "${RUNALYZE_PLAYGROUND_DIR}" ; sudo -su "${WWW_USER}" git pull)
+else
+    sudo -su "${WWW_USER}" git clone https://github.com/Runalyze/runalyze-playground.git "${RUNALYZE_PLAYGROUND_DIR}"
+fi
+
 
 echo "SETTING UP DATABASE"
 sed -i 's/^bind-address/#bind-address/g' /etc/mysql/mysql.conf.d/mysqld.cnf
